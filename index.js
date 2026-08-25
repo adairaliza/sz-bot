@@ -1,8 +1,19 @@
-// chan
 const fs = require("node:fs");
 const path = require("node:path");
+const express = require("express");
 const { Client, Collection, GatewayIntentBits} = require("discord.js");
 require("dotenv").config();
+
+// HEALTH SERVER
+const app = express();
+app.get("/health", (req, res) => {
+    res.sendStatus(200);
+});
+
+const port = process.env.PORT || 10000;
+app.listen(port, "0.0.0.0", () => {
+    console.log(`Health server listening on port ${port}`);
+});
 
 const client = new Client({ 
     partials: [ "MESSAGE", "CHANNEL", "REACTION"],
@@ -53,6 +64,5 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply({ content: "There was an error while executing this command",  ephemeral: true });
     }
 });
-
 
 client.login(process.env.TOKEN);
