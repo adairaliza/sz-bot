@@ -13,11 +13,11 @@ const getPoints = user => {
 }
 
 // Used by set.js
-const setPoints = async (user, int) => {
+const setPoints = async (user, pts) => {
     let response;
-    if(!int) {
+    if(!pts) {
         return "Please define the point field for this command.";
-    } else if(int < 0) {
+    } else if(pts < 0) {
         return "Please define a number of points higher than 0. >:-(";
     } else if(user == null || user.length < 1) {
         return errorResponse;
@@ -25,11 +25,11 @@ const setPoints = async (user, int) => {
 
     await User.updateOne({ discordId: user[0].discordId },
         {  
-            pointsAmt: int 
+            pointsAmt: pts 
         })
         .then(() => {
-            userPts = [ user[0]?.pointsAvail, int ];
-            response = `<@${user[0].discordId}> now has ${int} points!\n\`Available Points: ${userPts[0]}\` \n\`Leaderboard Points: ${userPts[1]}\``;
+            userPts = [ user[0]?.pointsAvail, pts ];
+            response = `<@${user[0].discordId}> now has ${pts} points!\n\`Available Points: ${userPts[0]}\` \n\`Leaderboard Points: ${userPts[1]}\``;
         })
         .catch(err => { 
             console.log(err); 
@@ -41,11 +41,11 @@ const setPoints = async (user, int) => {
 
 // Used by give.js
 // Used by checkIfAutoPointChannel in channel-event-util.js
-const givePoints = async (user, int) => {
+const givePoints = async (user, pts) => {
     let response;
-    if(!int) {
+    if(!pts) {
         return "Please define the point field for this command.";
-    } else if(int < 0) {
+    } else if(pts < 0) {
         return "Please define a number of points higher than 0. >:-(";
     } else if(user == null || user.length < 1) {
         return errorResponse;
@@ -54,13 +54,13 @@ const givePoints = async (user, int) => {
     await User.updateOne({ discordId: user[0].discordId },
         {
             $inc: {
-                pointsAmt: int,
-                pointsAvail: int
+                pointsAmt: pts,
+                pointsAvail: pts
             }
         })
         .then(() => {
-            userPts = [ user[0]?.pointsAvail + int, user[0]?.pointsAmt + int ];
-            pluralCheck = int > 1 ? "points" : "point"
+            userPts = [ user[0]?.pointsAvail + pts, user[0]?.pointsAmt + pts ];
+            pluralCheck = pts > 1 ? "points" : "point"
             response = `<@${user[0].discordId}> was rewarded ${int} ${pluralCheck}!\n\`Available Points: ${userPts[0]}\` \n\`Leaderboard Points: ${userPts[1]}\``;
         })
         .catch(err => { 
@@ -72,31 +72,31 @@ const givePoints = async (user, int) => {
 }
 
 // Used by take.js
-const takePoints = async (user, int) => {
+const takePoints = async (user, pts) => {
     let response;
-    if(!int) {
+    if(!pts) {
         return "Please define the point field for this command.";
-    } else if(int < 0) {
+    } else if(pts < 0) {
         return "Please define a number of points higher than 0. >:-(";
     } else if(user == null || user.length < 1) {
         return errorResponse;
     }
 
-    if(user[0]?.pointsAvail - int < 0) {
+    if(user[0]?.pointsAvail - pts < 0) {
         return "Users cannot have negative points.";
     }
 
     await User.updateOne({ discordId: user[0].discordId },
         {
             $inc: {
-                pointsAvail: -int
+                pointsAvail: -pts
             }
         }
     )
         .then(() =>  {
-            userPts = [ user[0]?.pointsAvail - int, user[0]?.pointsAmt - int ];
-            pluralCheck = int > 1 ? "points" : "point";
-            response = `<@${user[0].discordId}> lost ${int} ${pluralCheck}...\n\`Available Points: ${userPts[0]}\` \n\`Leaderboard Points: ${userPts[1]}\``
+            userPts = [ user[0]?.pointsAvail - pts, user[0]?.pointsAmt - pts ];
+            pluralCheck = pts > 1 ? "points" : "point";
+            response = `<@${user[0].discordId}> lost ${pts} ${pluralCheck}...\n\`Available Points: ${userPts[0]}\` \n\`Leaderboard Points: ${userPts[1]}\``
         })
         .catch(err => { 
             console.log(err); 
@@ -104,7 +104,6 @@ const takePoints = async (user, int) => {
         });
     
     return response;
-    
 }
 
 module.exports = { getPoints, setPoints, givePoints, takePoints };

@@ -5,8 +5,8 @@ require("dotenv").config();
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('delete')
-		.setDescription('Delete a user!')
-        .addMentionableOption(option => option.setName("user").setDescription("Specify who you want to remove from the Lemon Art Database. (required)")),
+		.setDescription("Delete a user!")
+        .addMentionableOption(option => option.setName('user').setDescription("Specify who you want to remove from the Lemon Art Database. (required)")),
 
 	async execute(interaction) {
         const adminRole = process.env.ADMIN_ROLE_ID;

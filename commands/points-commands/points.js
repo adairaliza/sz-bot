@@ -4,8 +4,8 @@ const { getUser, getPoints } = require("../../utility");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('points')
-		.setDescription('View a users available points. If no user is specified, view your own.')
-        .addMentionableOption(option => option.setName("user").setDescription("Specify who's points you want to view. (optional)")),
+		.setDescription("View a user's available points. If no user is specified, view your own.")
+        .addMentionableOption(option => option.setName('user').setDescription("Specify whose points you want to view. (optional)")),
 
 	async execute(interaction) {
         const mentionable = interaction.options.getMentionable('user');

@@ -5,7 +5,7 @@ const Pagination = require("customizable-discordjs-pagination");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('leaderboard')
-		.setDescription('View the servers leaderboard!'),
+		.setDescription("View the server's leaderboard!"),
 	async execute(interaction) {
         let arr = [];
         let pages  = [];
@@ -20,10 +20,11 @@ module.exports = {
             .sort({ pointsAmt : -1 })
             .then(users => {
                 users.forEach(user => {
-                    arr.push({
-                        "name": user.username,
-                        "points": user.pointsAmt
-                    });
+                    if(user.pointsAmt > 0)
+                        arr.push({
+                            "name": user.username,
+                            "points": user.pointsAmt
+                        });
                 });
             });
 
